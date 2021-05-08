@@ -6,7 +6,27 @@ namespace CHTG
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string algorithm;
+            bool isPicked = false;
+            do
+            {
+                Console.WriteLine("Wybierz algorytm:");
+                Console.WriteLine("1 - Algorytm zachłanny.");
+                Console.WriteLine("2 - Algorytm przeszukujący.");
+                Console.WriteLine("3 - Algorytm sąsiedzki.");
+                algorithm = Console.ReadLine();
+                if (algorithm == "1" || algorithm == "2" || algorithm == "3")
+                {
+                    isPicked = true;
+                }
+                else
+                {
+                    Console.WriteLine("Wybrałeś nieistniejący algorytm. Spróbuj ponownie.");
+                }
+            }
+            while (!isPicked);
+
+            Console.Read();
         }
     }
 }
