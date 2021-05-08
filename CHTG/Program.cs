@@ -12,6 +12,7 @@ namespace CHTG
         {
             string algorithm;
             bool isPicked = false;
+
             do
             {
                 Console.WriteLine("Wybierz algorytm:");
@@ -37,7 +38,8 @@ namespace CHTG
 
             serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0]);
 
-            Console.Read();
+            Console.WriteLine("Wciśnij enter aby zakończyć sesję.");
+            Console.ReadLine();
         }
     }
 }
