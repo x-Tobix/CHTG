@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CHTG.Services;
+using CHTG.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CHTG
 {
@@ -25,6 +28,12 @@ namespace CHTG
                 }
             }
             while (!isPicked);
+
+            var serviceProvider = new ServiceCollection()
+            .AddTransient<ISolvable, OCNService>()
+            .BuildServiceProvider();
+
+            serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0]);
 
             Console.Read();
         }
