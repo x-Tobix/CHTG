@@ -8,11 +8,11 @@ namespace CHTG.Utilities
     {
         public string ErrorMessage { get; set; }
 
-        public int[][] ParseCSVToIncidencyMatrix(string csv)
+        public int[,] ParseCSVToIncidencyMatrix(string csv)
         {
             var lines = File.ReadAllLines(csv);
 
-            int[][] matrix = new int[][] { };
+            int[,] matrix = new int[lines.Length, lines.Length];
 
             try
             {
@@ -24,7 +24,7 @@ namespace CHTG.Utilities
 
                     for (int j = 0; j < elements.Length; j++)
                     {
-                        matrix[i][j] = Convert.ToInt32(elements[j]);
+                        matrix[i,j] = Convert.ToInt32(elements[j]);
                     }
                 }
 
@@ -48,23 +48,23 @@ namespace CHTG.Utilities
             }
         }
 
-        private void ValidateDigraf(int[][] matrix)
+        private void ValidateDigraf(int[,] matrix)
         {
-            for (int i = 0; i < matrix[0].Length; i++)
+            for (int i = 0; i < Math.Sqrt(matrix.Length); i++)
             {
-                if (matrix[i][i] != 0)
+                if (matrix[i,i] != 0)
                 {
                     throw new InvalidInputFileException("Podany graf posiada wierzchołki które mają krawędzie do siebie.");
                 }
             }
 
-            for (int i = 0; i < matrix[0].Length; i++)
+            for (int i = 0; i < Math.Sqrt(matrix.Length); i++)
             {
-                for (int j = 0; j < matrix[0].Length; j++)
+                for (int j = 0; j < Math.Sqrt(matrix.Length); j++)
                 {
-                    if (matrix[i][j] != 0 && matrix[i][j] != 1)
+                    if (matrix[i,j] != 0 && matrix[i,j] != 1)
                     {
-                        throw new InvalidInputFileException("Podany graf posiada wierzchołki pomiędzy którymi jest więcej niż jedna droga.");
+                        throw new InvalidInputFileException("Podany graf posiada wierzchołki pomiędzy którymi jest więcej niż jedna krawędź.");
                     }
                 }
             }
@@ -75,13 +75,13 @@ namespace CHTG.Utilities
             }
         }
 
-        private void ValidateOrientation(int[][] matrix)
+        private void ValidateOrientation(int[,] matrix)
         {
-            for (int i = 0; i < matrix[0].Length; i++)
+            for (int i = 0; i < Math.Sqrt(matrix.Length); i++)
             {
-                for (int j = 0; j < matrix[0].Length; j++)
+                for (int j = 0; j < Math.Sqrt(matrix.Length); j++)
                 {
-                    if (matrix[i][j] == 1 && matrix[j][i] == 1)
+                    if (matrix[i,j] == 1 && matrix[j,i] == 1)
                     {
                         throw new InvalidInputFileException("Podany graf nie jest zorientowany.");
                     }

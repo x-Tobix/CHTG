@@ -16,7 +16,7 @@ namespace CHTG.Services
 
         public int FindOrientedChromaticNumber(int algorithm, string incidencyMatrixPath)
         {
-            int[][] matrix = _csvParser.ParseCSVToIncidencyMatrix(incidencyMatrixPath);
+            int[,] matrix = _csvParser.ParseCSVToIncidencyMatrix(incidencyMatrixPath);
 
             switch (algorithm)
             {
@@ -33,7 +33,7 @@ namespace CHTG.Services
             return 0;
         }
 
-        private int Greedy(int[][] matrix)
+        private int Greedy(int[,] matrix)
         {
             int chromaticNumber = 0;
             int[] graph = new int[(int)Math.Sqrt(matrix.Length)];
@@ -62,13 +62,13 @@ namespace CHTG.Services
             return chromaticNumber;
         }
 
-        private bool ValidateColoring(int[] graph, int[][] matrix)
+        private bool ValidateColoring(int[] graph, int[,] matrix)
         {
             for (int i = 0; i < graph.Length; i++)
             {
                 for (int j = 0; j < graph.Length; j++)
                 {
-                    if (matrix[i][j] == 1)
+                    if (matrix[i,j] == 1)
                     {
                         if (graph[i] == graph[j])
                         {
@@ -84,7 +84,7 @@ namespace CHTG.Services
             {
                 for (int j = 0; j < graph.Length; j++)
                 {
-                    if (matrix[i][j] == 1)
+                    if (matrix[i,j] == 1)
                     {
                         edges.Add((i, j));
                     }
