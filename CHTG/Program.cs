@@ -36,7 +36,7 @@ namespace CHTG
             .AddSingleton<CSVParser>()
             .BuildServiceProvider();
 
-            serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0]);
+            Console.WriteLine($"Zorientowana iczba chromatyczna wynosi {serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0])}.");
 
             Console.WriteLine("Wciśnij enter aby zakończyć sesję.");
             Console.ReadLine();
