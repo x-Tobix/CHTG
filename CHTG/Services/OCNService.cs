@@ -18,12 +18,17 @@ namespace CHTG.Services
         {
             int[,] matrix = _csvParser.ParseCSVToIncidencyMatrix(incidencyMatrixPath);
 
+            if (matrix.Length == 1)
+            {
+                return 1;
+            }
+
             switch (algorithm)
             {
                 case 1:
                     return Greedy(matrix);
                 case 2:
-                    return 2;
+                    return Gradual(matrix);
                 case 3:
                     return 3;
                 default:
@@ -31,6 +36,105 @@ namespace CHTG.Services
             }
 
             return 0;
+        }
+
+        private int Gradual(int[,] matrix)
+        {
+            int[] graph = new int[(int)Math.Sqrt(matrix.Length)];
+
+            //First item in tuple is vertex number, second is it's degree
+            (int,int)[] degrees = new (int,int)[(int)Math.Sqrt(matrix.Length)];
+            for (int i = 0; i < Math.Sqrt(matrix.Length); i++)
+            {
+                for (int j = 0; j < Math.Sqrt(matrix.Length); j++)
+                {
+                    degrees[i] = (degrees[i].Item1 + matrix[i, j] + matrix[j,i], i);
+                }
+            }
+
+            degrees = degrees.OrderByDescending(x => x.Item1).ToArray();
+
+            foreach (var degree in degrees)
+            {
+                graph[degree.Item2] = ColorVertex(degree.Item2, matrix, graph);
+            }
+
+            return graph.OrderByDescending(x => x).First();
+        }
+
+        private int ColorVertex(int vertex, int[,] matrix, int[] graph)
+        {
+            int color = 0;
+            int currentColor = 0;
+
+            while(color == 0)
+            {
+                currentColor++;
+
+                if (ValidateVertexColoring(matrix, graph, vertex, currentColor))
+                {
+                    color = currentColor;
+                }
+            }
+
+            return color;
+        }
+
+        private bool ValidateVertexColoring(int[,] matrix, int[] graph, int vertex, int color)
+        {
+            for (int i = 0; i < graph.Length; i++)
+            {
+                if (matrix[i, vertex] == 1 || matrix[vertex, i] == 1)
+                {
+                    if (graph[i] == color)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            List<(int, int)> edges = new List<(int, int)>();
+
+            for (int i = 0; i < graph.Length; i++)
+            {
+                for (int j = 0; j < graph.Length; j++)
+                {
+                    if (matrix[i, j] == 1)
+                    {
+                        edges.Add((i, j));
+                    }
+                }
+            }
+
+            foreach (var edge1 in edges.Where(x => (x.Item1 == vertex && graph[x.Item2] != 0) || (x.Item2 == vertex && graph[x.Item1] != 0)))
+            {
+                foreach (var edge2 in edges.Where(x => x != edge1 && ((graph[x.Item1] != 0 && graph[x.Item2] != 0) || (x.Item1 == vertex && graph[x.Item2] != 0 || (x.Item2 == vertex && graph[x.Item1] != 0)))))
+                {
+                    if (graph[edge2.Item1] == 0 || graph[edge2.Item2] == 0)
+                    {
+                        if ((graph[edge1.Item1], graph[edge1.Item2]) == (graph[edge2.Item2], graph[edge2.Item1]))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (edge1.Item1 == vertex)
+                    {
+                        if ((graph[edge2.Item2], graph[edge2.Item1]) == (color, graph[edge1.Item2]))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (edge1.Item2 == vertex)
+                    {
+                        if ((graph[edge2.Item2], graph[edge2.Item1]) == (graph[edge1.Item1], color))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         private int Greedy(int[,] matrix)

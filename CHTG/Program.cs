@@ -17,7 +17,7 @@ namespace CHTG
             {
                 Console.WriteLine("Wybierz algorytm:");
                 Console.WriteLine("1 - Algorytm zachłanny.");
-                Console.WriteLine("2 - Algorytm przeszukujący.");
+                Console.WriteLine("2 - Algorytm stopniowy.");
                 Console.WriteLine("3 - Algorytm sąsiedzki.");
                 algorithm = Console.ReadLine();
                 if (algorithm == "1" || algorithm == "2" || algorithm == "3")
@@ -36,7 +36,7 @@ namespace CHTG
             .AddSingleton<CSVParser>()
             .BuildServiceProvider();
 
-            Console.WriteLine($"Zorientowana iczba chromatyczna wynosi {serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0])}.");
+            Console.WriteLine($"Zorientowana liczba chromatyczna wynosi {serviceProvider.GetService<ISolvable>().FindOrientedChromaticNumber(Convert.ToInt32(algorithm), args[0])}.");
 
             Console.WriteLine("Wciśnij enter aby zakończyć sesję.");
             Console.ReadLine();
