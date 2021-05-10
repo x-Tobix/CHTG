@@ -18,6 +18,11 @@ namespace CHTG.Services
         {
             int[,] matrix = _csvParser.ParseCSVToIncidencyMatrix(incidencyMatrixPath);
 
+            if (matrix.Length == 1)
+            {
+                return 1;
+            }
+
             switch (algorithm)
             {
                 case 1:
