@@ -30,12 +30,76 @@ namespace CHTG.Services
                 case 2:
                     return Gradual(matrix);
                 case 3:
-                    return 3;
+                    return Neighbourhood(matrix);
                 default:
                     break;
             }
 
             return 0;
+        }
+
+        private int Neighbourhood(int[,] matrix)
+        {
+            int[] graph = new int[(int)Math.Sqrt(matrix.Length)];
+            int chromaticNumber = 2;
+            int counter = 0;
+
+            try
+            {
+                while (true)
+                {
+                    if (counter != 0)
+                    {
+                        if (ValidateColoring(graph, matrix))
+                        {
+                            return chromaticNumber;
+                        }
+                    }
+
+                    while (true)
+                    {
+                        int i = 0;
+                        bool breakLoop = false;
+
+                        while (true)
+                        {
+                            graph[i]++;
+                            if (graph[i] == chromaticNumber - 1)
+                            {
+                                counter++;
+                            }
+
+                            if (graph[i] < chromaticNumber)
+                            {
+                                breakLoop = true;
+                                break;
+                            }
+
+                            graph[i] = 0;
+                            counter--;
+                            i++;
+
+                            if(i == graph.Length)
+                            {
+                                chromaticNumber++;
+                                break;
+                            }
+                        }
+
+                        if (breakLoop)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                throw new Exception();
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("Nieoczekiwany błąd algorytmu sąsiedzkiego. Obliczenia zostają przerwane.");
+                return 0;
+            }
         }
 
         private int Gradual(int[,] matrix)
