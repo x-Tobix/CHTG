@@ -18,6 +18,12 @@ namespace CHTG.Services
         {
             int[,] matrix = _csvParser.ParseCSVToIncidencyMatrix(incidencyMatrixPath);
 
+            if(matrix == null)
+            {
+                Console.WriteLine(_csvParser.ErrorMessage);
+                return 0;
+            }
+
             if (matrix.Length == 1)
             {
                 return 1;
